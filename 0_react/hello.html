@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>0th React app</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+<body>
+    <div id="app"></div>
+    <script type="text/babel">
+        class Hello extends React.Component {
+            render() {
+                return (
+                    <div>
+                        <h1>Hello {this.props.name || "Noname"}!</h1>
+                        <button onClick={this.handleClick}>Click</button>
+                        <Counter />
+                    </div>
+                    //console.log('kik')
+                )
+            }
+            handleClick = () => {
+                console.log('kik ' + this.props.name);
+            }
+        }
+        class App extends React.Component {
+            render() {
+                return (
+                    <div>
+                        <Hello name="Key"/>
+                        <Hello name="Magenta"/>
+                        <Hello name="Yellow"/>
+                        <Hello name="Cyan"/>
+                        <Hello />
+                        
+                    </div>
+                )
+            }
+        }
+        class Counter extends React.Component {
+            
+            constructor(props) {
+                super(props);
+                this.state = {
+                    count: 0
+                };
+            }
+
+            render() {
+                return (
+                    <div>
+                        <h1>{this.state.count}</h1>
+                        <button onClick={this.decrement}>Decrement</button>
+                        <button onClick={this.increment}>Increment</button>
+                    </div>
+                )
+            }
+
+            increment = () => {
+                this.setState(oldState => ({
+                    count: oldState.count + 1
+                    // count: this.state.count + 1 // lead to potential issues
+                }));
+
+            }
+
+            decrement = () => {
+                this.setState(oldState => ({
+                    count: oldState.count - 1
+                }));
+
+            }
+
+        }
+        ReactDOM.render(<App />, document.getElementById('app'));
+    </script>
+</body>
+</html>
