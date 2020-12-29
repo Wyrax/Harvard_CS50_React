@@ -25,6 +25,14 @@
 
         class CardEditor extends React.Component {
 
+            constructor(props) {
+                super(props);
+                this.state = {
+                    front: '',
+                    back: ''
+                };
+            }
+
             render() {
 
                 const rows = this.props.cards.map((card, i) => {
@@ -33,7 +41,7 @@
                         <tr key={i}>
                             <td>{card.front}</td>
                             <td>{card.back}</td>
-                            <td><button>Delete</button></td>
+                            <td><button data-index = {i} onClick = {this.deleteCard}>Delete</button></td>
                         </tr>
                     );
                 });
@@ -54,12 +62,33 @@
                                 {rows}
                             </tbody>
                         </table>
+                        <br />
+                        <input onChange={this.handleChange} name="front" placeholder="Front of Card" value={this.state.front} />
+                        <input onChange={this.handleChange} name="back" placeholder="Back of Card" value={this.state.back} />
+                        <button onClick = {this.addCard}>Add Card</button>
                         <hr />
                         <button onClick = {this.props.switchMode}>Go to Viewer</button>
                     </div>
                 );
             }
 
+            handleChange = (event) => {
+                this.setState({
+                    [event.target.name]: event.target.value
+                });
+            }
+
+            addCard = () => {
+                this.props.addCard(this.state.front, this.state.back);
+                this.setState({
+                    front: '',
+                    back: ''
+                });
+            }
+
+            deleteCard = (event) => {
+                this.props.deleteCard(event.target.dataset.index);
+            }
         }
 
         class CardViewer extends React.Component {
@@ -82,8 +111,7 @@
                 super(props);
                 this.state = {
                     editor: true,
-                    cards: [{front: 'test front', back: 'test back'},
-                            {front: 'test 2 front', back: 'test 2 back'}]
+                    cards: []
                 };
             }
 
@@ -93,6 +121,8 @@
                         <CardEditor
                             cards = {this.state.cards}
                             switchMode = {this.switchMode}
+                            addCard = {this.addCard}
+                            deleteCard = {this.deleteCard}
                         />
                     )
                 } else {
@@ -104,10 +134,25 @@
                     );
                 }
             }
+
             switchMode = () => {
                 this.setState(state => ({
                     editor: !state.editor //WOAH! good switch logic example
-                }))
+                }));
+            }
+
+            addCard = (front, back) => {
+                this.setState(state => ({
+                    cards: [...state.cards, { front: front, back: back }]
+                }));
+            }
+
+            deleteCard = (index) => {
+                this.setState(state => {
+                    const cards = [...state.cards];
+                    cards.splice(index, 1);
+                    return { cards: cards };
+                });
             }
         }
 
