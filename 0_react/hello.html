@@ -17,7 +17,6 @@
                     <div>
                         <h1>Hello {this.props.name || "Noname"}!</h1>
                         <button onClick={this.handleClick}>Click</button>
-                        <Counter />
                     </div>
                     //console.log('kik')
                 )
@@ -35,6 +34,7 @@
                         <Hello name="Yellow"/>
                         <Hello name="Cyan"/>
                         <Hello />
+                        <Counter />
                         
                     </div>
                 )
@@ -49,9 +49,24 @@
                 };
             }
 
+            componentDidMount() {
+                const count = localStorage.getItem('count');
+                if (count !== null) {
+                    this.setState({
+                        count: parseInt(count)
+                    });
+                }
+            
+
+                window.addEventListener('beforeunload', () => {
+                    localStorage.setItem('count', this.state.count);
+                });
+            }
+
             render() {
                 return (
                     <div>
+                        <hr />
                         <h1>{this.state.count}</h1>
                         <button onClick={this.decrement}>Decrement</button>
                         <button onClick={this.increment}>Increment</button>
